@@ -1,0 +1,52 @@
+{
+  "name": "data-grid",
+  "version": "1.0.0",
+  "description": "DataGrid React Component.",
+  "main": "lib/DataGrid.js",
+  "scripts": {
+    "start": "start-storybook -p 9001 -c .storybook",
+    "test": "jest --config",
+    "build": "babel src -d lib --source-maps",
+    "deploy-storybook": "storybook-to-ghpages"
+  },
+  "keywords": [
+    "react",
+    "component"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@kadira/storybook": "^2.35.3",
+    "babel-jest": "^20.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^2.8.2",
+    "jest": "^20.0.0",
+    "jest-enzyme": "^3.1.0",
+    "react-test-renderer": "^15.5.4"
+  },
+  "dependencies": {
+    "@kadira/storybook-deployer": "^1.2.0",
+    "@storybook/addon-actions": "^3.0.0-alpha.0",
+    "@storybook/addons": "^3.0.0-alpha.0",
+    "prop-types": "^15.5.10",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
+    "unmockedModulePathPatterns": [
+      "react",
+      "enzyme",
+      "jest-enzyme"
+    ]
+  },
+  "storybook-deployer": {
+    "gitUsername": "danielkov",
+    "gitEmail": "kovacsemod@gmail.com",
+    "commitMessage": "Deploy Storybook to GH Pages"
+  }
+}
