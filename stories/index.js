@@ -1,6 +1,8 @@
 import React from 'react'
 import { storiesOf, action } from '@kadira/storybook'
 
+import './grid.css'
+
 import DataGrid from '../src/DataGrid'
 
 const prop = 'DataGrid'
@@ -232,15 +234,20 @@ storiesOf('DataGrid', module)
     <DataGrid
       columns={cols}
       data={data}
-      style={{border: '1px solid lightblue', boxShadow: 'none', borderRadius: '8px', overflow: 'hidden'}}
-      headerStyle={{color: 'steelblue', background: 'lightblue'}}
+      style={{border: '1px solid aliceblue', boxShadow: 'none', borderRadius: '8px', overflow: 'hidden'}}
+      headerStyle={{color: 'steelblue', background: 'aliceblue'}}
       headerCellStyle={{color: 'steelblue', padding: '30px 40px', fontSize: '20px'}}
       rowStyle={{color: 'steelblue', border: '1px solid lightblue'}}
       cellStyle={{color: 'steelblue', padding: '20px 40px'}}
-      headerClassName={'custom class'}
-      headerCellClassName={'custom class'}
-      cellClassName={'custom class'}
-      rowClassName={'custom class'}
+    />
+  ))
+  .add('custom classes', () => (
+    <DataGrid
+      columns={cols}
+      data={data}
+      cellClassName="custom-cell"
+      rowClassName="custom-row"
+      headerClassName="custom-header"
     />
   ))
   .add('event handlers', () => (
@@ -253,6 +260,5 @@ storiesOf('DataGrid', module)
       data={data}
       onRowClick={action('row-click')}
       onCellClick={action('cell-click')}
-      cellStyle={{border: '1px solid #e9e9e9'}}
     />
   ))
