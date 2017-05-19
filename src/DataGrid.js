@@ -26,20 +26,63 @@ class DataGridRow extends PureComponent {
     style:          object,
     className:      string,
     onClick:        func,
-    onCellClick:    func
+    onCellClick:    func,
+    renderCell:     func
+  }
+
+  componentWillMount () {
+    this._renderFunc = this.props.renderCell || this._renderCell
+  }
+
+  _renderCells = () => {
+    let {
+      renderCell,
+      data
+    } = this.props
+
+    let {
+      _renderFunc
+    } = this
+
+    return data.map(_renderFunc)
+  }
+
+  _renderCell = (d, i) => {
+    let {
+      cellStyle,
+      cellClassName,
+      onCellClick,
+    } = this.props
+
+    return (
+      <td
+        key=      {i}
+        style=    {{...defaultCellStyles, ...cellStyle}}
+        className={cellClassName}
+        onClick=  {onCellClick}
+      >
+        { d.component ?
+            <dat.component value={d.value}/> :
+            d.value
+        }
+      </td>
+    )
   }
 
   render () {
     let {
-      data,
       style,
       className,
+      onClick,
       cellStyle,
       cellClassName,
-      onClick,
       onCellClick,
       ...rest
     } = this.props
+
+    let {
+      _renderCells
+    } = this
 
     return (
       <tr
@@ -48,19 +91,7 @@ class DataGridRow extends PureComponent {
         className={className}
         style=    {style}
       >
-        {data.map((dat, i) => (
-          <th
-            key=      {i}
-            style=    {{...defaultCellStyles, ...cellStyle}}
-            className={cellClassName}
-            onClick={onCellClick}
-          >
-          { dat.component ?
-              <dat.component value={dat.value}/> :
-              dat.value
-          }
-          </th>
-        ))}
+        {_renderCells()}
       </tr>
     )
   }
@@ -98,7 +129,9 @@ class DataGridHeader extends PureComponent {
                 key=      {dat.index}
                 style=    {{...defaultCellStyles, ...cellStyle}}
                 className={cellClassName}
-              >{dat.name}</th>
+              >
+                {dat.name}
+              </th>
             ))}
           </tr>
       </thead>
@@ -126,7 +159,9 @@ class DataGrid extends PureComponent {
     headerClassName:    string,
     headerCellClassName:string,
     cellClassName:      string,
-    rowClassName:       string
+    rowClassName:       string,
+    renderRow:          func,
+    renderCell:         func
   }
 
   static defaultProps = {
@@ -136,24 +171,24 @@ class DataGrid extends PureComponent {
 
   indexes = this.props.columns.map((col, i) => col.index)
 
+  componentWillMount () {
+    this._renderFunc = this.props.renderRow || this._renderRow
+  }
+
   componentWillUpdate (nextProps) {
     this.indexes = nextProps.columns.map((col, i) => col.index)
   }
 
-  renderData () {
+  _renderRows = () => {
     let {
       data,
       columns,
-      rowStyle,
-      rowClassName,
-      cellStyle,
-      cellClassName,
-      onRowClick,
-      onCellClick
+      renderRow
     } = this.props
 
     let {
-      indexes
+      indexes,
+      _renderFunc
     } = this
 
     let dats = []
@@ -166,7 +201,21 @@ class DataGrid extends PureComponent {
       dats.push(dat)
     })
 
-    return dats.map((d, i) => <DataGridRow
+    return dats.map(_renderFunc)
+  }
+
+  _renderRow = (d, i) => {
+    let {
+      rowStyle,
+      rowClassName,
+      cellStyle,
+      cellClassName,
+      onRowClick,
+      onCellClick,
+      renderRow
+    } = this.props
+
+    return <DataGridRow
       key=          {i}
       data=         {d}
       className=    {rowClassName}
@@ -175,7 +224,7 @@ class DataGrid extends PureComponent {
       cellClassName={cellClassName}
       onClick=      {onRowClick}
       onCellClick=  {onCellClick}
-    />)
+    />
   }
 
   render () {
@@ -211,7 +260,7 @@ class DataGrid extends PureComponent {
           data=         {columns}
         />
         <tbody>
-          {this.renderData()}
+          {this._renderRows()}
         </tbody>
       </table>
     )
@@ -219,3 +268,8 @@ class DataGrid extends PureComponent {
 }
 
 export default DataGrid
+
+export {
+  DataGridRow,
+  DataGridHeader
+}
