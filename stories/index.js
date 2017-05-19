@@ -3,13 +3,14 @@ import { storiesOf, action } from '@kadira/storybook'
 
 import './grid.css'
 
-import DataGrid from '../src/DataGrid'
+import DataGrid, { defaultStyles as styles } from '../src/DataGrid'
 
-const prop = 'DataGrid'
+const color1 = '#f1f1f1'
+const color2 = '#e9e9e9'
 
 const buttonStyles = {
-  background: '#f1f1f1',
-  border: '1px solid #e9e9e9',
+  background: color1,
+  border: `1px solid ${color2}`,
   padding: '12px 20px',
   borderRadius: '3px',
   boxShadow: '0 2px 8px rgba(0,0,0,.1)',
@@ -252,13 +253,20 @@ storiesOf('DataGrid', module)
   ))
   .add('event handlers', () => (
     <DataGrid
-      onClick={(e) => {
-        e.persist()
-        console.log(e)
-      }}
       columns={cols}
       data={data}
       onRowClick={action('row-click')}
       onCellClick={action('cell-click')}
+    />
+  ))
+  .add('using built in default styles', () => (
+    <DataGrid
+      columns={cols}
+      data={data}
+      style={styles.table}
+      cellStyle={styles.cell}
+      rowStyle={styles.row}
+      headerCellStyle={styles.cell}
+      headerStyle={styles.header}
     />
   ))

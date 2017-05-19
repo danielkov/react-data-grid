@@ -1,20 +1,34 @@
 import React, { PureComponent } from 'react'
 import { number, object, string, func, shape, arrayOf, array, element } from 'prop-types'
 
+
 const color1 = '#f1f1f1'
 const color2 = '#e9e9e9'
 
-const defaultTableStyles = {
-  width:          `100%`,
-  border:         `1px solid ${color2}`,
-  fontFamily:     `helvetica`,
-  borderCollapse: `collapse`,
-  boxShadow:      `0 10px 60px rgba(0,0,0,.1)`
-}
+const defaultStyles = {
+  table: {
+    width:          `100%`,
+    border:         `1px solid ${color2}`,
+    fontFamily:     `helvetica`,
+    borderCollapse: `collapse`,
+    boxShadow:      `0 10px 60px rgba(0,0,0,.1)`
+  },
 
-const defaultCellStyles = {
-  padding:    `15px 25px`,
-  fontWeight: `normal`
+  cell: {
+    padding:    `20px 25px`,
+    fontWeight: `normal`,
+    textAlign: 'center'
+  },
+
+  header: {
+    background: color1,
+    boxShadow: `0 2px 4px rgba(0,0,0,.1)`,
+    fontSize: '20px'
+  },
+
+  row: {
+    border: `1px solid ${color1}`
+  }
 }
 
 class DataGridRow extends PureComponent {
@@ -57,12 +71,12 @@ class DataGridRow extends PureComponent {
     return (
       <td
         key=      {i}
-        style=    {{...defaultCellStyles, ...cellStyle}}
+        style=    {cellStyle}
         className={cellClassName}
         onClick=  {onCellClick}
       >
         { d.component ?
-            <dat.component value={d.value}/> :
+            <d.component value={d.value}/> :
             d.value
         }
       </td>
@@ -121,13 +135,13 @@ class DataGridHeader extends PureComponent {
     return (
       <thead {...rest}>
           <tr
-            style=    {{background: color1, ...style}}
+            style=    {style}
             className={className}
           >
             {data.map((dat, i) => (
               <th
                 key=      {dat.index}
-                style=    {{...defaultCellStyles, ...cellStyle}}
+                style=    {cellStyle}
                 className={cellClassName}
               >
                 {dat.name}
@@ -142,16 +156,14 @@ class DataGridHeader extends PureComponent {
 class DataGrid extends PureComponent {
 
   static propTypes = {
-    activeRow:          number,
-    activeField:        string,
-    data:               array,
     columns:            arrayOf(shape({
-                          name: string,
-                          index: string,
-                          component: func
-                        })),
+      name: string,
+      index: string,
+      component: func
+    })),
+    data:               array,
     onRowClick:         func,
-    onFieldClick:       func,
+    onCellClick:       func,
     headerStyle:        object,
     headerCellStyle:    object,
     rowStyle:           object,
@@ -230,8 +242,6 @@ class DataGrid extends PureComponent {
   render () {
     let {
       columns,
-      style,
-      className,
       rowStyle,
       rowClassName,
       headerClassName,
@@ -248,8 +258,6 @@ class DataGrid extends PureComponent {
     return (
       <table
         {...rest}
-        style=    {{...defaultTableStyles, ...style}}
-        className={className}
       >
         <DataGridHeader
           onClick=      {onRowClick}
@@ -271,5 +279,6 @@ export default DataGrid
 
 export {
   DataGridRow,
-  DataGridHeader
+  DataGridHeader,
+  defaultStyles
 }
